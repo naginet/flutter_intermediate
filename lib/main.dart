@@ -94,7 +94,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void didUpdateWidget(oldWidget) {
-    print("call deactivate()");
+    print("call didUpdateWidget()");
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
