@@ -1,6 +1,17 @@
 import 'dart:io';
 
 class Async {
+  void asynctest1() {
+    print("method begin");
+    print(DateTime.now().toString());
+    print("data1 start");
+    print(asyncFunc("data1", 3));
+    print("data2 start");
+    print(asyncFunc("data2", 2));
+    print("data3 start");
+    print(asyncFunc("data3", 1));
+  }
+
   void asynctest3() async {
     print("method begin");
     print(DateTime.now().toString());
@@ -13,16 +24,17 @@ class Async {
     print("data3 start");
     Future<String> result3 = asyncFunc("data3", 1);
     result3.then((result) => print(result));
-    // void asynctest1() {
-    //   print("method begin");
-    //   print(DateTime.now().toString());
-    //   print("data1 start");
-    //   print(syncFunc("data1", 3));
-    //   print("data2 start");
-    //   print(syncFunc("data2", 2));
-    //   print("data3 start");
-    //   print(syncFunc("data3", 1));
-    // }
+  }
+
+  void asynctest4() async {
+    print("method begin");
+    print(DateTime.now().toString());
+    print("data1 start");
+    print(await asyncFunc("data1", 3));
+    print("data2 start");
+    print(await asyncFunc("data2", 2));
+    print("data3 start");
+    print(await asyncFunc("data3", 1));
   }
 }
 
