@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'Async.dart';
+import 'dummy.dart';
 
 void main() {
   runApp(MyApp());
@@ -34,13 +35,37 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _incrementCounter() {
     setState(() {
+      print("call setState");
       _counter++;
     });
-    Async().asynctest4();
+    // Async().asynctest4();
+    nextPage();
+  }
+
+  void nextPage() async {
+    {
+      await Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (context) {
+        return DummyPage();
+      }));
+    }
+  }
+
+  @override
+  void initState() {
+    print("call initState");
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    print("call didChangeDependencies");
+    super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
+    print("call build");
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -65,5 +90,22 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Icon(Icons.add),
       ),
     );
+  }
+
+  @override
+  void didUpdateWidget(oldWidget) {
+    print("call deactivate()");
+  }
+
+  @override
+  void deactivate() {
+    print("call deactivate");
+    super.deactivate();
+  }
+
+  @override
+  void dispose() {
+    print("call dispose");
+    super.dispose();
   }
 }
