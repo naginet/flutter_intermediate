@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_intermediate/BussinessLogic.dart';
 
 void main() {
   runApp(MyApp());
@@ -27,44 +30,37 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
+class _MyHomePageState extends State<MyHomePage> {
+  int _counter = 0;
+  var intStream = StreamController<int>();
+  var stringStream = StreamController<String>.broadcast();
+  var generator = new Generator();
+  var coodinator = new Coordinator();
+  var consumer = new Consumer();
+
+  _incrementCounter() {
+    generator.generate();
+    setState(() {
+      _counter++;
+    });
+  }
+
   @override
   void initState() {
+    generator.init(intStream);
+    coodinator.init(intStream, stringStream);
+    consumer.init(stringStream);
+    coodinator.coorinate();
+    consumer.consume();
+
     super.initState();
-    WidgetsBinding.instance!.addObserver(this);
   }
 
   @override
   void dispose() {
-    print("dispose");
-    WidgetsBinding.instance!.removeObserver(this);
+    intStream.close();
+    stringStream.close();
     super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    print("state = $state");
-    switch (state) {
-      case AppLifecycleState.inactive:
-        print('非アクティブ担ったときの処理');
-        break;
-      case AppLifecycleState.paused:
-        print('停止されたときの処理');
-        break;
-      case AppLifecycleState.resumed:
-        print('再開されたときの処理');
-        break;
-      case AppLifecycleState.detached:
-        print('破棄されたときの処理');
-        break;
-    }
-  }
-
-  int _counter = 0;
-  _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
   }
 
   @override
@@ -84,6 +80,16 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
               '$_counter',
               style: Theme.of(context).textTheme.headline4,
             ),
+            StreamBuilder<String>(
+              stream: stringStream.stream,
+              initialData: "",
+              builder: (context, snapshot) {
+                return Text(
+                  'RANDOM : ${snapshot.data}',
+                  style: Theme.of(context).textTheme.headline4,
+                );
+              },
+            )
           ],
         ),
       ),
